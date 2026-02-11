@@ -32,20 +32,29 @@ public class MessageConnection {
 		}
 	}
 
-	public void send(Message message) throws IOException {
+	public void send(Message message){
 
 		byte[] data = MessageUtils.encapsulate(message);
 
-		outStream.write(data);
+        try {
+            outStream.write(data);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-	}
+    }
 
-	public Message receive() throws IOException {
+	public Message receive() {
 
 		byte[] data = new byte[MessageUtils.SEGMENTSIZE];
 
-		inStream.read(data);
-		Message message = MessageUtils.decapsulate(data);
+        try {
+            inStream.read(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Message message = MessageUtils.decapsulate(data);
 
 		return message;
 		

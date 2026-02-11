@@ -24,7 +24,7 @@ public class MessagingServer {
 	}
 
 	// accept an incoming connection from a client
-	public MessageConnection accept() throws IOException {
+	public MessageConnection accept() {
 
 		MessageConnection connection = null;
 
