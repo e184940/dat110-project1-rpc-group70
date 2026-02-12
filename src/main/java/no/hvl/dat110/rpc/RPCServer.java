@@ -54,6 +54,9 @@ public class RPCServer {
 
 		   // - lookup the method to be invoked
 			RPCRemoteImpl service = services.get(rpcid);
+			if(service == null) {
+				System.err.println("RPC method " + rpcid + " not found");
+			}
 
 		   // - invoke the method and pass the param
 			byte[] res = service.invoke(param);
@@ -90,6 +93,8 @@ public class RPCServer {
 		} else {
 			System.out.println("RPCServer.stop - msgserver was null");
 		}
-		
+
+		// empty the services register
+		services.clear();
 	}
 }

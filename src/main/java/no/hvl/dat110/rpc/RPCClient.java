@@ -37,21 +37,28 @@ public class RPCClient {
 		
 		byte[] returnval = null;
 
-		// encapsulate rpcid og param according to rpc message format
-		byte[] rpcrequest = RPCUtils.encapsulate(rpcid, param);
+        try {
+            // encapsulate rpcid og param according to rpc message format
+            byte[] rpcrequest = RPCUtils.encapsulate(rpcid, param);
 
-		// sende rpc request message
-		Message requestmsg = new Message(rpcrequest);
-		connection.send(requestmsg);
+            // sende rpc request message
+            Message requestmsg = new Message(rpcrequest);
+            connection.send(requestmsg);
 
-		// recieve rpc reply message
-		Message replymsg = connection.receive();
+            // recieve rpc reply message
+            Message replymsg = connection.receive();
 
-		// decapsulate returned value from rpc reply
-		byte[] rpcreply = replymsg.getData();
-		returnval = RPCUtils.decapsulate(rpcreply);
+            // decapsulate returned value from rpc reply
+            byte[] rpcreply = replymsg.getData();
+            returnval = RPCUtils.decapsulate(rpcreply);
 
-		return returnval;
+        } catch (Exception e) {
+
+            System.err.println("RPC call failed " + e.getMessage());
+			return null;
+        }
+
+        return returnval;
 		
 	}
 
