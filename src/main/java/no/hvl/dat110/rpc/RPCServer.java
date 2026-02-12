@@ -24,7 +24,7 @@ public class RPCServer {
 		
 	}
 	
-	public void run() throws IOException {
+	public void run() {
 		
 		// the stop RPC method is built into the server
 		RPCRemoteImpl rpcstop = new RPCServerStopImpl(RPCCommon.RPIDSTOP,this);
@@ -42,26 +42,34 @@ public class RPCServer {
 		   byte rpcid = 0;
 		   Message requestmsg, replymsg;
 		   
-		   // TODO - START
 		   // - receive a Message containing an RPC request
+			requestmsg = connection.receive();
+
 		   // - extract the identifier for the RPC method to be invoked from the RPC request
+			byte[] rpcrequest = requestmsg.getData();
+			rpcid = rpcrequest[0];
+
 		   // - extract the method's parameter by decapsulating using the RPCUtils
+			byte[] param = RPCUtils.decapsulate(rpcrequest);
+
 		   // - lookup the method to be invoked
+			RPCRemoteImpl service = services.get(rpcid);
+
 		   // - invoke the method and pass the param
-		   // - encapsulate return value 
+			byte[] res = service.invoke(param);
+
+		   // - encapsulate return value
+			byte[] rpcreply = RPCUtils.encapsulate(rpcid, res);
+
 		   // - send back the message containing the RPC reply
-			
-		   if (true)
-				throw new UnsupportedOperationException(TODO.method());
-		   
-		   // TODO - END
+			replymsg = new Message(rpcreply);
+			connection.send(replymsg);
 
 			// stop the server if it was stop methods that was called
 		   if (rpcid == RPCCommon.RPIDSTOP) {
 			   stop = true;
 		   }
 		}
-	
 	}
 	
 	// used by server side method implementations to register themselves in the RPC server
