@@ -30,7 +30,7 @@ public class MessagingClient {
         try {
             clientSocket = new Socket(server, port);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         connection = new MessageConnection(clientSocket);
