@@ -23,7 +23,7 @@ public class MessagingClient {
 	public MessageConnection connect () {
 
 		// client-side socket for underlying TCP connection to messaging server
-		Socket clientSocket;
+		Socket clientSocket = null;
 
 		MessageConnection connection = null;
 
